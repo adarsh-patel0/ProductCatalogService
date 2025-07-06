@@ -1,0 +1,81 @@
+package com.example.ProductCatalogServiceProxyy.Services;
+
+import com.example.ProductCatalogServiceProxyy.Clients.Client.FakeStoreAPIClient;
+import com.example.ProductCatalogServiceProxyy.Clients.Dtos.FakeStoreProductDto;
+import com.example.ProductCatalogServiceProxyy.Models.Category;
+import com.example.ProductCatalogServiceProxyy.Models.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class FakeStoreProductService implements IProductService {
+
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
+
+    @Autowired
+    private FakeStoreAPIClient fakeStoreAPIClient;
+
+
+    @Override
+    public List<Product> getProducts() {
+        List<FakeStoreProductDto> fakeProduct = fakeStoreAPIClient.getProducts();
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductDto fakeStoreProductDto : fakeProduct){
+            products.add(getProduct(fakeStoreProductDto));
+        }
+        return products;
+    }
+
+    @Override
+    public Product getProduct(Long ProductId) {
+       return getProduct(fakeStoreAPIClient.getProduct(ProductId));
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        FakeStoreProductDto fakeStoreProductDto = getFakeStoreProductDto(product);
+        FakeStoreProductDto response = fakeStoreAPIClient.createProduct(fakeStoreProductDto);
+        return getProduct(response);
+    }
+
+    @Override
+    public Product updateProduct(Long ProductId, Product product) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        FakeStoreProductDto fakeStoreProductDto = restTemplate.patchForObject("https://fakestoreapi.com/{id}", product, FakeStoreProductDto.class, ProductId);
+        Product resultantProduct = getProduct(fakeStoreProductDto);
+        return resultantProduct;
+    }
+
+    private Product getProduct(FakeStoreProductDto productDto){
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setTitle(productDto.getTitle());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
+        product.setImageUrl(productDto.getImageUrl());
+//        Category category = new Category();
+//        category.setName(productDto.getCategory());
+//        product.setCategory(category);
+        return product;
+    }
+
+    private FakeStoreProductDto getFakeStoreProductDto(Product product){
+        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+        fakeStoreProductDto.setId(product.getId());
+        fakeStoreProductDto.setCategory(product.getCategory());
+        fakeStoreProductDto.setPrice(product.getPrice());
+        fakeStoreProductDto.setTitle(product.getTitle());
+        fakeStoreProductDto.setImageUrl(product.getImageUrl());
+        fakeStoreProductDto.setDescription(product.getDescription());
+        return fakeStoreProductDto;
+    }
+
+
+}
