@@ -1,6 +1,7 @@
 package com.example.ProductCatalogServiceProxyy.Repository;
 
 import com.example.ProductCatalogServiceProxyy.Models.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,7 @@ public interface ProductRepo extends JpaRepository<Product,Long> {
     String getCategoryNameFromProductId(@Param("id1") Long id);
 
     List<Product> findAllByIsPrimeTrue();
+
+    List<Product> findByTitleEquals(String query, Pageable pageable);
 
 }
