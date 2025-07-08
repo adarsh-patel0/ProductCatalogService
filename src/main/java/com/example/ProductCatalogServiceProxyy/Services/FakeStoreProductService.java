@@ -6,6 +6,8 @@ import com.example.ProductCatalogServiceProxyy.Models.Category;
 import com.example.ProductCatalogServiceProxyy.Models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,7 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//@Primary
+//@Service
 public class FakeStoreProductService implements IProductService {
 
     @Autowired
@@ -21,6 +24,9 @@ public class FakeStoreProductService implements IProductService {
 
     @Autowired
     private FakeStoreAPIClient fakeStoreAPIClient;
+
+//    @Autowired
+//    private RedisTemplate<String,Object> redisTemplate;
 
 
     @Override
@@ -35,7 +41,26 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public Product getProduct(Long ProductId) {
-       return getProduct(fakeStoreAPIClient.getProduct(ProductId));
+        // check if product is in cache
+        // if yes :
+        //      read from cache
+        // else :
+        //     call fakestore and get result
+        //     store result in cache
+
+        //productid_epochtimestamp
+//        FakeStoreProductDto fakeStoreProductDto = null;
+//        fakeStoreProductDto = (FakeStoreProductDto) redisTemplate.opsForHash().get("PRODUCTS",ProductId);
+//        if(fakeStoreProductDto != null) {
+//            System.out.println("Read from Cache");
+//            return getProduct(fakeStoreProductDto);
+//        }
+//
+//        fakeStoreProductDto = fakeStoreAPIClient.getProduct(ProductId);
+//        System.out.println("Read from Fakestore API");
+//        redisTemplate.opsForHash().put("PRODUCTS",ProductId,fakeStoreProductDto);
+//        return getProduct(fakeStoreProductDto);
+        return getProduct(fakeStoreAPIClient.getProduct(ProductId));
     }
 
     @Override

@@ -35,7 +35,6 @@ public class ProductController {
         } catch (Exception exception){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @PostMapping
@@ -62,6 +61,5 @@ public class ProductController {
         product.setCategory(category);
         return product;
     }
-
 
 }
