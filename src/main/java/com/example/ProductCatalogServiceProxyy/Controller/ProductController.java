@@ -1,6 +1,7 @@
 package com.example.ProductCatalogServiceProxyy.Controller;
 
 import com.example.ProductCatalogServiceProxyy.Dtos.ProductDto;
+import com.example.ProductCatalogServiceProxyy.Dtos.UserDto;
 import com.example.ProductCatalogServiceProxyy.Models.Category;
 import com.example.ProductCatalogServiceProxyy.Models.Product;
 import com.example.ProductCatalogServiceProxyy.Services.IProductService;
@@ -37,6 +38,12 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/{uid}/{pid}")
+    public Product getProductDetails(@PathVariable Long uid,@PathVariable Long pid){
+        return productService.getProductdetails(uid,pid);
+    }
+
+
     @PostMapping
     public Product createProduct(@RequestBody ProductDto productDto) {
         Product product = getProduct(productDto);
@@ -44,9 +51,9 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") @RequestBody Long ProductId, ProductDto productDto) {
-        Product product1 = getProduct(productDto);
-        return productService.updateProduct(ProductId,product1);
+    public Product updateProduct(@PathVariable("id") Long ProductId, @RequestBody ProductDto productDto) {
+        Product product = getProduct(productDto);
+        return productService.updateProduct(ProductId,product);
     }
 
     public Product getProduct(ProductDto productDto){
@@ -61,5 +68,4 @@ public class ProductController {
         product.setCategory(category);
         return product;
     }
-
 }

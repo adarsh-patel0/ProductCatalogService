@@ -1,7 +1,6 @@
 package com.example.ProductCatalogServiceProxyy.Clients.Client;
 
 import com.example.ProductCatalogServiceProxyy.Clients.Dtos.FakeStoreProductDto;
-import com.example.ProductCatalogServiceProxyy.Models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +36,11 @@ public class FakeStoreAPIClient {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.postForEntity("https://fakestoreapi.com/products",fakeStoreProductDto,FakeStoreProductDto.class);
         return fakeStoreProductDtoResponseEntity.getBody();
+    }
+
+    public FakeStoreProductDto updateProduct(Long ProductId, FakeStoreProductDto fakeStoreProductDto) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        FakeStoreProductDto fakeStoreProductDtoo = restTemplate.patchForObject("https://fakestoreapi.com/{id}", fakeStoreProductDto, FakeStoreProductDto.class, ProductId);
+        return fakeStoreProductDtoo;
     }
 }

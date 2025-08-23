@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Search")
+@RequestMapping("/search")
 public class SearchController {
 
     @Autowired

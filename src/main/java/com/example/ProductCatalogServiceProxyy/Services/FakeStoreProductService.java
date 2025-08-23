@@ -6,17 +6,13 @@ import com.example.ProductCatalogServiceProxyy.Models.Category;
 import com.example.ProductCatalogServiceProxyy.Models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@Primary
-//@Service
+@Service
 public class FakeStoreProductService implements IProductService {
 
     @Autowired
@@ -72,10 +68,18 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public Product updateProduct(Long ProductId, Product product) {
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.patchForObject("https://fakestoreapi.com/{id}", product, FakeStoreProductDto.class, ProductId);
-        Product resultantProduct = getProduct(fakeStoreProductDto);
-        return resultantProduct;
+//        RestTemplate restTemplate = restTemplateBuilder.build();
+//        FakeStoreProductDto fakeStoreProductDto = restTemplate.patchForObject("https://fakestoreapi.com/{id}", product, FakeStoreProductDto.class, ProductId);
+//        Product resultantProduct = getProduct(fakeStoreProductDto);
+//        return resultantProduct;
+        FakeStoreProductDto fakeStoreProductDto = getFakeStoreProductDto(product);
+        FakeStoreProductDto response = fakeStoreAPIClient.updateProduct(ProductId,fakeStoreProductDto);
+        return getProduct(response);
+    }
+
+    @Override
+    public Product getProductdetails(Long userId, Long productId) {
+        return null;
     }
 
     private Product getProduct(FakeStoreProductDto productDto){
@@ -85,16 +89,16 @@ public class FakeStoreProductService implements IProductService {
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setImageUrl(productDto.getImageUrl());
-//        Category category = new Category();
-//        category.setName(productDto.getCategory());
-//        product.setCategory(category);
+        Category category = new Category();
+        category.setName(productDto.getCategory());
+        product.setCategory(category);
         return product;
     }
 
     private FakeStoreProductDto getFakeStoreProductDto(Product product){
         FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
         fakeStoreProductDto.setId(product.getId());
-        fakeStoreProductDto.setCategory(product.getCategory());
+        fakeStoreProductDto.setCategory(product.getCategory().getName());
         fakeStoreProductDto.setPrice(product.getPrice());
         fakeStoreProductDto.setTitle(product.getTitle());
         fakeStoreProductDto.setImageUrl(product.getImageUrl());

@@ -37,4 +37,9 @@ public class ProductServiceStub implements IProductService {
         products.put(ProductId,product);
         return products.get(ProductId);
     }
+
+    @Override
+    public Product getProductdetails(Long userId, Long productId) {
+        return null;
+    }
 }
