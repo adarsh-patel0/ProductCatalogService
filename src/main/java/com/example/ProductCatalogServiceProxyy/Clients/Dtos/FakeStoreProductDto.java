@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class FakeStoreProductDto  {
+public class FakeStoreProductDto implements Serializable {
 
     private Long id;
 
