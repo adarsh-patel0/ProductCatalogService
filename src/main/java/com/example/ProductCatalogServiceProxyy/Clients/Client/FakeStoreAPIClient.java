@@ -40,7 +40,7 @@ public class FakeStoreAPIClient {
 
     public FakeStoreProductDto updateProduct(Long ProductId, FakeStoreProductDto fakeStoreProductDto) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        FakeStoreProductDto fakeStoreProductDtoo = restTemplate.patchForObject("https://fakestoreapi.com/{id}", fakeStoreProductDto, FakeStoreProductDto.class, ProductId);
+        FakeStoreProductDto fakeStoreProductDtoo = restTemplate.patchForObject("https://fakestoreapi.com/products/{id}", fakeStoreProductDto, FakeStoreProductDto.class, ProductId);
         return fakeStoreProductDtoo;
     }
 }

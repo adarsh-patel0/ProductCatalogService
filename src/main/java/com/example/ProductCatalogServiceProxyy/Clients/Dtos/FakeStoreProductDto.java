@@ -24,5 +24,5 @@ public class FakeStoreProductDto implements Serializable {
 
     private String category;
 
-    private FakeStoreProductDto fakeStoreProductDto;
+    private FakeStoreRatingDto fakeStoreRatingDto;
 }
