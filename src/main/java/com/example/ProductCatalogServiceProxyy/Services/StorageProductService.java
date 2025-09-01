@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-//@Service
+@Service
 public class StorageProductService implements IProductService{
 
     @Autowired
@@ -42,7 +42,12 @@ public class StorageProductService implements IProductService{
 
     @Override
     public Product updateProduct(Long ProductId, Product product) {
-        return null;
+        Product product1 = productRepo.findProductById(ProductId);
+        product1.setPrice(product.getPrice());
+        product1.setDescription(product.getDescription());
+        product1.setTitle(product.getTitle());
+        Product resultProduct = productRepo.save(product1);
+        return resultProduct;
     }
 
     @Override

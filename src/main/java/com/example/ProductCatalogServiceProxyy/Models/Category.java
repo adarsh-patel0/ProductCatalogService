@@ -1,6 +1,7 @@
 package com.example.ProductCatalogServiceProxyy.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -23,6 +24,7 @@ public class Category extends BaseModel{
 
     @OneToMany(mappedBy = "category" , fetch = FetchType.LAZY)
     @Fetch(FetchMode.SELECT)
+    @JsonManagedReference
     private List<Product> products;
 
 }

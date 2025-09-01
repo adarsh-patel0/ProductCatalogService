@@ -1,5 +1,6 @@
 package com.example.ProductCatalogServiceProxyy.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -20,6 +21,7 @@ public class Product extends BaseModel {
     private String imageUrl;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
     private Category category;
 
     private Boolean isPrime;

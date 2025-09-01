@@ -43,7 +43,6 @@ public class ProductController {
         return productService.getProductdetails(uid,pid);
     }
 
-
     @PostMapping
     public Product createProduct(@RequestBody ProductDto productDto) {
         Product product = getProduct(productDto);
