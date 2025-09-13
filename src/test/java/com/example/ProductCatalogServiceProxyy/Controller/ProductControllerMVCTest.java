@@ -13,11 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
@@ -55,6 +55,24 @@ public class ProductControllerMVCTest {
     }
 
     @Test
+    public void Test_getProductById_ReceivesSuccessfulResponse() throws Exception {
+        // Arrange
+        Product product = new Product();
+        product.setId(1000L);
+        product.setTitle("IPhone12");
+        product.setDescription("Latest model");
+
+        when(productService.getProduct(1000L)).thenReturn(product);
+
+        mockMvc.perform(get("/product/{id}", 1000L))
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(product)))
+                .andExpect(jsonPath("$.id").value(1000L))
+                .andExpect(jsonPath("$.title").value("IPhone12"))
+                .andExpect(jsonPath("$.description").value("Latest model"));
+    }
+
+    @Test
     public void Test_createProduct_ReceivesSuccessfulResponse() throws Exception {
         Product productToCreate = new Product();
         productToCreate.setTitle("Orange");
@@ -71,9 +89,37 @@ public class ProductControllerMVCTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productToCreate)))
                 .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(expectedProduct)))
-                .andExpect(jsonPath("$.length()").value(10))
-                .andExpect(jsonPath("$.title").value("Orange"));
+                .andExpect(content().string(objectMapper.writeValueAsString(expectedProduct)));
+//                .andExpect(jsonPath("$.length()").value(10))
+//                .andExpect(jsonPath("$.title").value("Orange"));
+
+    }
+
+    @Test
+    public void Test_updateProduct_ReceivesSuccessfulResponse()  throws Exception{
+
+        Product ExistingProduct = new Product();
+        ExistingProduct.setId(1000L);
+        ExistingProduct.setTitle("Orange");
+        ExistingProduct.setDescription("Freshy and Juicy");
+
+        Product updatedProduct = new Product();
+        updatedProduct.setId(1000L);
+        updatedProduct.setTitle("Apple");
+        updatedProduct.setDescription("Red and Juicy");
+
+        Product ExpectedProduct = new Product();
+        ExpectedProduct.setId(1000L);
+        ExpectedProduct.setTitle("Apple");
+        ExpectedProduct.setDescription("Red and Juicy");
+
+        when(productService.updateProduct(any(Long.class),any(Product.class))).thenReturn(ExpectedProduct);
+
+        mockMvc.perform(patch("/product/{id}",1000L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedProduct)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(ExpectedProduct)));
 
     }
 }

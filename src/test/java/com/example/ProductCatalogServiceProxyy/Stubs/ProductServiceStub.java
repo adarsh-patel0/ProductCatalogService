@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-//@Service
+@Service
 public class ProductServiceStub implements IProductService {
 
     Map<Long,Product> products;

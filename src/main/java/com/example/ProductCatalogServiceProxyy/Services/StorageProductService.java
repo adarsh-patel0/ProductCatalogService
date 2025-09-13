@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Service
+//@Service
 public class StorageProductService implements IProductService{
 
     @Autowired
