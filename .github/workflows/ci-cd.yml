@@ -21,7 +21,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t adarsh261/product-service:latest ./productservice
+        docker build -t adarsh261/product-service:latest .
         docker push adarsh261/product-service:latest
 
     - name: Set up kubectl
@@ -36,4 +36,3 @@ jobs:
         echo $KUBECONFIG_BASE64 | base64 --decode > kubeconfig
         set KUBECONFIG=%CD%\kubeconfig
         kubectl set image deployment/product-deployment product-container=adarsh261/product-service:latest
-
